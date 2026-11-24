@@ -1,45 +1,66 @@
-id = "yocraft/battery-widget"
+id = "tunaflsh/battery-widget"
 name = "Battery Widget"
-version = "2.2.0"
-plugin_api = 51
-author = "yocraft"
+version = "1.0.0"
+plugin_api = 26
+author = "tunaflsh"
 license = "MIT"
-deprecated = false
 icon = "battery"
-description = "Desktop/Lockscreen widget that displays battery level, status, charging rate, and time remaining."
-tags = [ "desktop", "hardware", "system", "utility" ]
-dependencies = [ "upower", "gdbus" ]
+description = "Battery bar widget with a stable rate/time estimate and real battery health derived from SMBIOS design capacity."
+tags = [ "bar", "hardware", "system", "utility", "indicator" ]
 
-[[desktop_widget]]
-id = "widget"
+# Plugin-level settings are shared by the sampler service and the bar widget.
+
+[[setting]]
+key = "device"
+type = "string"
+label_key = "settings.device.label"
+description_key = "settings.device.description"
+default = "auto"
+
+[[setting]]
+key = "design_capacity_mwh"
+type = "int"
+label_key = "settings.design_capacity_mwh.label"
+description_key = "settings.design_capacity_mwh.description"
+default = 0
+min = 0
+max = 200000
+step = 1
+
+[[setting]]
+key = "auto_detect_design"
+type = "bool"
+label_key = "settings.auto_detect_design.label"
+description_key = "settings.auto_detect_design.description"
+default = false
+advanced = true
+
+[[setting]]
+key = "smoothing_window_min"
+type = "int"
+label_key = "settings.smoothing_window_min.label"
+description_key = "settings.smoothing_window_min.description"
+default = 20
+min = 10
+max = 60
+step = 5
+advanced = true
+
+[[widget]]
+id = "battery"
 entry = "widget.luau"
 
-  [[desktop_widget.setting]]
-  key = "layout"
-  type = "select"
-  label_key = "settings.layout.label"
-  description_key = "settings.layout.description"
-  default = "horizontal"
-  options = [
-    { value = "horizontal", label_key = "settings.layout.horizontal" },
-    { value = "vertical", label_key = "settings.layout.vertical" },
-  ]
+  [widget.actions]
+  left = "panel-toggle control-center power"
 
-  [[desktop_widget.setting]]
-  key = "show_glyph"
-  type = "bool"
-  label_key = "settings.show_glyph.label"
-  description_key = "settings.show_glyph.description"
-  default = true
-
-  [[desktop_widget.setting]]
+  [[widget.setting]]
   key = "show_label"
   type = "bool"
   label_key = "settings.show_label.label"
   description_key = "settings.show_label.description"
   default = true
 
-  [[desktop_widget.setting]]
+  [[widget.setting]]
   key = "label_content"
   type = "select"
   label_key = "settings.label_content.label"
@@ -51,30 +72,28 @@ entry = "widget.luau"
     { value = "rate", label_key = "settings.label_content.rate" },
   ]
 
-  [[desktop_widget.setting]]
-  key = "hide_plugged"
+  [[widget.setting]]
+  key = "hide_when_plugged"
   type = "bool"
-  label_key = "settings.hide_plugged.label"
-  description_key = "settings.hide_plugged.description"
+  label_key = "settings.hide_when_plugged.label"
+  description_key = "settings.hide_when_plugged.description"
   default = false
 
-  [[desktop_widget.setting]]
-  key = "hide_full"
+  [[widget.setting]]
+  key = "hide_when_full"
   type = "bool"
-  label_key = "settings.hide_full.label"
-  description_key = "settings.hide_full.description"
+  label_key = "settings.hide_when_full.label"
+  description_key = "settings.hide_when_full.description"
   default = false
 
+  [[widget.setting]]
+  key = "show_health"
+  type = "bool"
+  label_key = "settings.show_health.label"
+  description_key = "settings.show_health.description"
+  default = true
 
-  [[desktop_widget.setting]]
-  key = "color"
-  type = "color"
-  label_key = "settings.color.label"
-  description_key = "settings.color.description"
-  default = "on_surface"
-  advanced = true
-
-  [[desktop_widget.setting]]
+  [[widget.setting]]
   key = "warning_color"
   type = "color"
   label_key = "settings.warning_color.label"
@@ -82,38 +101,6 @@ entry = "widget.luau"
   default = "error"
   advanced = true
 
-  [[desktop_widget.setting]]
-  key = "charging_color"
-  type = "color"
-  label_key = "settings.charging_color.label"
-  description_key = "settings.charging_color.description"
-  default = "on_surface"
-  advanced = true
-
-
-  [[desktop_widget.setting]]
-  key = "battery"
-  type = "select"
-  label_key = "settings.battery.label"
-  description_key = "settings.battery.description"
-  default = "auto"
-  options = [
-    { value = "auto", label_key = "settings.battery.auto" },
-    { value = "bat0", label_key = "settings.battery.bat0" },
-    { value = "custom", label_key = "settings.battery.custom" },
-  ]
-
-  [[desktop_widget.setting]]
-  key = "battery_name"
-  type = "string"
-  label_key = "settings.battery_name.label"
-  description_key = "settings.battery_name.description"
-  default = "BAT0"
-  visible_when = { key = "battery", values = ["custom"] }
-
-  [[desktop_widget.setting]]
-  key = "click_action"
-  type = "string"
-  label_key = "settings.click_action.label"
-  description_key = "settings.click_action.description"
-  default = ""
+[[service]]
+id = "sampler"
+entry = "service.luau"

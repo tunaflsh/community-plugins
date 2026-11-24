@@ -1,67 +1,77 @@
 {
-  "notify": {
-    "error": "Something went wrong. Check the Noctalia log for details."
-  },
   "settings": {
-    "battery": {
-      "auto": "Auto",
-      "bat0": "BAT0",
-      "custom": "Custom",
-      "description": "Detect the battery automatically or set a custom name.",
-      "label": "Battery"
+    "device": {
+      "label": "Battery device",
+      "description": "auto, a sysfs battery name such as BAT0, or an absolute sysfs path"
     },
-    "battery_name": {
-      "description": "Name of the battery.",
-      "label": "Battery Name"
+    "design_capacity_mwh": {
+      "label": "Design capacity (mWh)",
+      "description": "0 = auto: a cached SMBIOS value, a direct SMBIOS read, then the firmware's energy_full_design. Set a value only to override auto-detection."
     },
-    "charging_color": {
-      "description": "Color applied when connected to AC power.",
-      "label": "Charging Color"
+    "auto_detect_design": {
+      "label": "Auto-detect design capacity",
+      "description": "When the firmware reports the full-charge capacity as the design capacity, ask once (polkit) to read the real value from SMBIOS Type 22 and cache it. Requires pkexec and dmidecode."
     },
-    "click_action": {
-      "description": "Shell command executed when clicking the widget, leaving empty does nothing.",
-      "label": "Click action"
-    },
-    "color": {
-      "description": "Color role for this widget's icon and label; fixed hex colors are also supported.",
-      "label": "Color"
-    },
-    "hide_full": {
-      "description": "Hide the battery widget when fully charged.",
-      "label": "Hide When Full"
-    },
-    "hide_plugged": {
-      "description": "Hide the battery widget when connected to AC power.",
-      "label": "Hide When Plugged In"
-    },
-    "label_content": {
-      "description": "What the battery label shows: charge percentage, time remaining, or power draw.",
-      "label": "Label Content",
-      "percent": "Percent",
-      "rate": "Rate",
-      "time": "Time"
-    },
-    "layout": {
-      "description": "Widget layout.",
-      "horizontal": "Horizontal",
-      "label": "Layout",
-      "vertical": "Vertical"
-    },
-    "refresh_interval": {
-      "description": "Controls how frequently the widget updates its content. (in seconds)",
-      "label": "Refresh Interval"
-    },
-    "show_glyph": {
-      "description": "Show the battery icon.",
-      "label": "Show Glyph"
+    "smoothing_window_min": {
+      "label": "Rate averaging window (minutes)",
+      "description": "Least-squares window used for the power and time estimate. Longer is steadier, shorter reacts sooner."
     },
     "show_label": {
-      "description": "Show text next to the icon.",
-      "label": "Show Label"
+      "label": "Show label",
+      "description": "Show the text next to the battery glyph"
+    },
+    "label_content": {
+      "label": "Label content",
+      "description": "What the label shows on a horizontal bar",
+      "percent": "Percentage",
+      "time": "Time remaining",
+      "rate": "Power draw"
+    },
+    "hide_when_plugged": {
+      "label": "Hide when plugged in",
+      "description": "Hide the widget while the charger is connected"
+    },
+    "hide_when_full": {
+      "label": "Hide when full",
+      "description": "Hide the widget when the battery is fully charged"
+    },
+    "show_health": {
+      "label": "Show health",
+      "description": "Show battery health in the tooltip"
     },
     "warning_color": {
-      "description": "Color applied when charge is at or below noctalia's warning threshold.",
-      "label": "Warning Color"
+      "label": "Warning color",
+      "description": "Color used at or below the global battery warning threshold"
     }
+  },
+  "status": {
+    "charging": "Charging",
+    "discharging": "Discharging",
+    "plugged_in": "Plugged in",
+    "empty": "Empty",
+    "unknown": "Battery"
+  },
+  "tooltip": {
+    "battery": "Battery",
+    "status": "Status",
+    "time_left": "Time left",
+    "time_to_full": "Time to full",
+    "rate": "Power",
+    "health": "Health",
+    "design": "Design",
+    "cycles": "Cycles",
+    "design_unreported": "design not reported"
+  },
+  "time": {
+    "hours_minutes": "{hours}h {minutes}m",
+    "hours": "{hours}h",
+    "minutes": "{minutes}m",
+    "less_than_minute": "less than a minute"
+  },
+  "notify": {
+    "detect_title": "Battery design capacity",
+    "detect_missing": "pkexec or dmidecode is not installed, so the design capacity cannot be read from SMBIOS.",
+    "detect_failed": "Could not read the design capacity from SMBIOS. Set it manually in the plugin settings.",
+    "detect_ok": "Design capacity detected: {capacity} Wh. Health now uses the real value."
   }
 }
